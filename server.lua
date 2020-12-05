@@ -27,7 +27,7 @@ end)
  end)
 
  function isAuthed(xPlayer)
-	for k, v in ipairs(Config.groups) do 
+	for k, v in ipairs(Config.Groups) do 
 		if xPlayer.getGroup() == v.group then
 			return true
 		end

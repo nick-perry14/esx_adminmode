@@ -3,6 +3,7 @@ local lastJob = nil
 local lastGrade = nil
 local spawnedVeh = {}
 local lastarmor = 0
+local lastskin = nil
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
 RegisterNetEvent('esx_adminmode:onCommand')
@@ -34,16 +35,33 @@ function DeleteSpawnedVehicles()
 end
 
 function onDuty()
+	local xPlayer = ESX.GetPlayerData()
 	lastJob = xPlayer.job.name
 	lastGrade = xPlayer.job.grade
 	lastarmor = GetPedArmour(PlayerPedId())
-	local info = getInfo()
+	local info = {}
+		ESX.TriggerServerCallback('esx_adminmode:checkGroup', function(group)
+		for k, v in ipairs(Config.Groups) do 
+			print(v.group)
+			if group == v.group then
+			info = v
+			break
+			end
+		end
+		TriggerServerEvent('esx_adminmode:setJob', info.job, info.grade)
 	ESX.Streaming.RequestModel(info.ped, function()	
 		SetPlayerModel(PlayerId(), info.ped)
 		SetModelAsNoLongerNeeded(info.ped)
 		SetPedDefaultComponentVariation(PlayerPedId())
 		for k,v in ipairs(info.pedvari) do
-			SetPedComponentVariation(PlayerPedID(), v.component, v.texture, v.color, 0)
+			SetPedComponentVariation(GetPlayerPed(-1), v.component, v.texture-1, v.color-1, 0)
+		end
+		for k,v in ipairs(info.pedprop) do
+			if v.texture == 0 then
+			ClearPedProp(ped, v.component)
+			else
+			SetPedPropIndex(GetPlayerPed(-1), v.component, v.texture-1, v.color-1, v.attach)
+			end
 		end
 		TriggerEvent('esx:restoreLoadout')
 		if info.god then
@@ -100,6 +118,7 @@ function onDuty()
 			end)
 		end
 	end)
+	end)
 end
 
 function offDuty()
@@ -136,18 +155,6 @@ function isOnDuty()
 	end
 		return false
 end
-
-function getInfo()
-	ESX.TriggerServerCallback('esx_adminmode:checkGroup', function(group)
-		for k, v in ipairs(Config.Groups) do 
-			if group == v.group then
-				return v
-			end
-		end
-		return nil
-	end)
-end
-
 
 RegisterCommand("adminmode", function() 
 		local xPlayer = ESX.GetPlayerData()
