@@ -21,9 +21,9 @@ Upon Disabling admin mode, the resource:
 - Resets the player's ped to the ESX skin (looking to change to last ped to work with EUP)
 
 ## Download
--[Download Latest Release](https://github.com/nick-perry14/esx_adminmode/releases/latest)
--[See All Releases](https://github.com/nick-perry14/esx_adminmode/releases)
--[Download Source Code](https://github.com/nick-perry14/esx_adminmode/archive/main.zip)
+- [Download Latest Release](https://github.com/nick-perry14/esx_adminmode/releases/latest)
+- [See All Releases](https://github.com/nick-perry14/esx_adminmode/releases)
+- [Download Source Code](https://github.com/nick-perry14/esx_adminmode/archive/main.zip)
 
 ## Help
 Before asking me for help, or creating an issue, please check out the Wiki, located [here](https://github.com/nick-perry14/esx_adminmode/wiki)
