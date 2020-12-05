@@ -3,7 +3,7 @@
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/nick-perry14/esx_adminmode)](#)
 [![Maintenance](https://img.shields.io/maintenance/yes/2020)](#)
 [![GitHub all releases](https://img.shields.io/github/downloads/nick-perry14/esx_adminmode/total)](https://github.com/nick-perry14/esx_adminmode/releases)
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/nick-perry14/esx_adminmode)](https://github.com/nick-perry14/esx_adminmode/releases)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/nick-perry14/esx_adminmode)](https://github.com/nick-perry14/esx_adminmode/releases/latest)
 [![GitHub issues](https://img.shields.io/github/issues/nick-perry14/esx_adminmode)](https://github.com/nick-perry14/esx_adminmode/issues)
 
 ## About
