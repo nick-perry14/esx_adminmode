@@ -1,10 +1,10 @@
 # esx_adminmode
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/nick-perry14/esx_adminmode)
-![Maintenance](https://img.shields.io/maintenance/yes/2020)
-![GitHub all releases](https://img.shields.io/github/downloads/nick-perry14/esx_adminmode/total)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/nick-perry14/esx_adminmode)
-![GitHub issues](https://img.shields.io/github/issues/nick-perry14/esx_adminmode)
+[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/nick-perry14/esx_adminmode)](#)
+[![Maintenance](https://img.shields.io/maintenance/yes/2020)](#)
+[![GitHub all releases](https://img.shields.io/github/downloads/nick-perry14/esx_adminmode/total)](https://github.com/nick-perry14/esx_adminmode/releases)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/nick-perry14/esx_adminmode)](https://github.com/nick-perry14/esx_adminmode/releases)
+[![GitHub issues](https://img.shields.io/github/issues/nick-perry14/esx_adminmode)](https://github.com/nick-perry14/esx_adminmode/issues)
 
 ## About
 This is a simple admin-mode project that allows users of a specific group to change into a special "on duty mode".  This mode automatically:
