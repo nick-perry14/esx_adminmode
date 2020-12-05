@@ -20,9 +20,13 @@ Upon Disabling admin mode, the resource:
 - Removes the admin vehicle (unreliable at the current point)
 - Resets the player's ped to the ESX skin (looking to change to last ped to work with EUP)
 
+## Help
+Before asking me for help, or creating an issue, please check out the Wiki, located [here](https://github.com/nick-perry14/esx_adminmode/wiki)
+
 ## API
 The simplest way to check if a user is in Admin Mode is to check their job.  If their job is one of the specified admin mode jobs, it can be assumed the user is in admin mode.
 
 ## Future Features
 - Config File with different groups
 - Add toggles for car spawn, ped spawn, etc.
+- Option to NOT spawn car with admin
