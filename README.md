@@ -20,6 +20,9 @@ Upon Disabling admin mode, the resource:
 - Removes the admin vehicle (unreliable at the current point)
 - Resets the player's ped to the ESX skin (looking to change to last ped to work with EUP)
 
+## Commands
+- /adminmode - Toggles the player into admin mode.
+
 ## Download
 - [Download Latest Release](https://github.com/nick-perry14/esx_adminmode/releases/latest)
 - [See All Releases](https://github.com/nick-perry14/esx_adminmode/releases)
