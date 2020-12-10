@@ -4,7 +4,7 @@ local lastGrade = nil
 local spawnedVeh = {}
 local lastarmor = 0
 local lastskin = nil
-TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+local pos_before_assist,assisting,assist_target,last_assist = nil, false, nil, nil
 
 RegisterNetEvent('esx_adminmode:onCommand')
 AddEventHandler('esx_adminmode:onCommand', function()
@@ -166,3 +166,180 @@ RegisterCommand("adminmode", function()
 		end
 	end)
 end)
+
+Citizen.CreateThread(function()
+	while ESX == nil do
+		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+		Citizen.Wait(0)
+	end
+	SetNuiFocus(false, false)
+	if Config.assist_keys then
+	Citizen.CreateThread(function()
+		while true do
+			Citizen.Wait(0)
+			if IsControlJustPressed(0, Config.assist_keys.accept) then
+				if not last_assist then
+					ESX.ShowNotification("~r~Noone requested assistance yet")
+				elseif not NetworkIsPlayerActive(GetPlayerFromServerId(last_assist)) then
+					ESX.ShowNotification("~r~The player that requested assistance is not online anymore")
+					last_assist=nil
+				else
+					TriggerServerEvent("esx_adminmode:acceptAssistKey",last_assist)
+				end
+			end
+			if IsControlJustPressed(0, Config.assist_keys.decline) then
+				TriggerEvent("esx_adminmode:hideAssistPopup")
+			end
+		end
+	end)
+end
+end)
+
+function GetIndexedPlayerList()
+	local players = {}
+	for k,v in ipairs(GetActivePlayers()) do
+		players[tostring(GetPlayerServerId(v))]=GetPlayerName(v)..(v==PlayerId() and " (self)" or "")
+	end
+	return json.encode(players)
+end
+
+RegisterNUICallback("ban", function(data,cb)
+	if not data.target or not data.reason then return end
+	ESX.TriggerServerCallback("esx_adminmode:ban",function(success,reason)
+		if success then ESX.ShowNotification("~g~Successfully banned player") else ESX.ShowNotification(reason) end -- dont ask why i did it this way, im a bit retarded
+	end, data.target, data.reason, data.length, data.offline)
+end)
+
+RegisterNUICallback("warn", function(data,cb)
+	print('warn callback')
+	if not data.target or not data.message then return end
+	ESX.TriggerServerCallback("esx_adminmode:warn",function(success)
+		if success then ESX.ShowNotification("~g~Successfully warned player") else ESX.ShowNotification("~r~Something went wrong") end
+	end, data.target, data.message, data.anon)
+end)
+
+RegisterNUICallback("kick", function(data,cb)
+	if not data.target or not data.message then return end
+	ESX.TriggerServerCallback("esx_adminmode:kick",function(success)
+		if success then ESX.ShowNotification("~g~Successfully kicked player") else ESX.ShowNotification("~r~Something went wrong") end
+	end, data.target, data.message, data.anon)
+end)
+
+RegisterNUICallback("unban", function(data,cb)
+	if not data.id then return end
+	ESX.TriggerServerCallback("esx_adminmode:unban",function(success)
+		if success then ESX.ShowNotification("~g~Successfully unbanned player") else ESX.ShowNotification("~r~Something went wrong") end
+	end, data.id)
+end)
+
+RegisterNUICallback("getListData", function(data,cb)
+	if not data.list or not data.page then cb(nil); return end
+	ESX.TriggerServerCallback("esx_adminmode:getListData",function(data)
+		cb(data)
+	end, data.list, data.page)
+end)
+
+RegisterNUICallback("hidecursor", function(data,cb)
+	SetNuiFocus(false, false)
+end)
+
+RegisterNetEvent("esx_adminmode:gotBanned")
+AddEventHandler("esx_adminmode:gotBanned",function(rsn)
+	Citizen.CreateThread(function()
+		local scaleform = RequestScaleformMovie("mp_big_message_freemode")
+		while not HasScaleformMovieLoaded(scaleform) do Citizen.Wait(0) end
+		BeginScaleformMovieMethod(scaleform, "SHOW_SHARD_WASTED_MP_MESSAGE")
+		PushScaleformMovieMethodParameterString("~r~BANNED")
+		PushScaleformMovieMethodParameterString(rsn)
+		PushScaleformMovieMethodParameterInt(5)
+		EndScaleformMovieMethod()
+		PlaySoundFrontend(-1, "LOSER", "HUD_AWARDS")
+		ClearDrawOrigin()
+		ESX.UI.HUD.SetDisplay(0)
+		while true do
+			Citizen.Wait(0)
+			DisableAllControlActions(0)
+			DisableFrontendThisFrame()
+			local ped = GetPlayerPed(-1)
+			ESX.UI.Menu.CloseAll()
+			SetEntityCoords(ped, 0, 0, 0, 0, 0, 0, false)
+			FreezeEntityPosition(ped, true)
+			DrawRect(0.0,0.0,2.0,2.0,0,0,0,255)
+			DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255)
+		end
+		SetScaleformMovieAsNoLongerNeeded(scaleform)
+	end)
+end)
+
+RegisterNetEvent("esx_adminmode:receiveWarn")
+AddEventHandler("esx_adminmode:receiveWarn",function(sender,message)
+	TriggerEvent("chat:addMessage",{color={255,255,0},multiline=true,args={"Admin Mode","You received a warning"..(sender~="" and " from "..sender or "").."!\n-> "..message}})
+	Citizen.CreateThread(function()
+		local scaleform = RequestScaleformMovie("mp_big_message_freemode")
+		while not HasScaleformMovieLoaded(scaleform) do Citizen.Wait(0) end
+		BeginScaleformMovieMethod(scaleform, "SHOW_SHARD_WASTED_MP_MESSAGE")
+		PushScaleformMovieMethodParameterString("~y~WARNING")
+		PushScaleformMovieMethodParameterString(message)
+		PushScaleformMovieMethodParameterInt(5)
+		EndScaleformMovieMethod()
+		PlaySoundFrontend(-1, "LOSER", "HUD_AWARDS")
+		local drawing = true
+		Citizen.SetTimeout(Config.warning_screentime,function() drawing = false end)
+		while drawing do
+			Citizen.Wait(0)
+			DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255)
+		end
+		SetScaleformMovieAsNoLongerNeeded(scaleform)
+	end)
+end)
+
+RegisterNetEvent("esx_adminmode:requestedAssist")
+AddEventHandler("esx_adminmode:requestedAssist",function(t)
+	SendNUIMessage({show=true,window="assistreq",data=Config.popassistformat:format(GetPlayerName(GetPlayerFromServerId(t)),t)})
+	last_assist=t
+end)
+
+RegisterNetEvent("esx_adminmode:acceptedAssist")
+AddEventHandler("esx_adminmode:acceptedAssist",function(t)
+	if assisting then return end
+	local target = GetPlayerFromServerId(t)
+	if target then
+		local ped = GetPlayerPed(-1)
+		pos_before_assist = GetEntityCoords(ped)
+		assisting = true
+		assist_target = t
+		ESX.Game.Teleport(ped,GetEntityCoords(GetPlayerPed(target))+vector3(0,0.5,0))
+	end
+end)
+
+RegisterNetEvent("esx_adminmode:assistDone")
+AddEventHandler("esx_adminmode:assistDone",function()
+	if assisting then
+		assisting = false
+		if pos_before_assist~=nil then ESX.Game.Teleport(GetPlayerPed(-1),pos_before_assist+vector3(0,0.5,0)); pos_before_assist = nil end
+		assist_target = nil
+	end
+end)
+
+RegisterNetEvent("esx_adminmode:hideAssistPopup")
+AddEventHandler("esx_adminmode:hideAssistPopup",function(t)
+	SendNUIMessage({hide=true})
+	last_assist=nil
+end)
+
+RegisterNetEvent("esx_adminmode:showWindow")
+AddEventHandler("esx_adminmode:showWindow",function(win)
+	if win=="ban" or win=="warn" or win=="kick" then
+		SendNUIMessage({show=true,window=win,players=GetIndexedPlayerList()})
+	elseif win=="banlist" or win=="warnlist" then
+		SendNUIMessage({loading=true,window=win})
+		ESX.TriggerServerCallback(win=="banlist" and "esx_adminmode:getBanList" or "esx_adminmode:getWarnList",function(list,pages)
+			SendNUIMessage({show=true,window=win,list=list,pages=pages})
+		end)
+	end
+	SetNuiFocus(true, true)
+end)
+
+RegisterCommand("decassist",function(a,b,c)
+	TriggerEvent("esx_adminmode:hideAssistPopup")
+end, false)
