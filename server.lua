@@ -342,10 +342,11 @@ RegisterCommand('assist', function(source, args, user)
         if ac>0 then
             open_assists[source]=reason
             Citizen.SetTimeout(120000,function()
-                if open_assists[source] then open_assists[source]=nil end
-                if GetPlayerName(source)~=nil then
-                    TriggerClientEvent("chat:addMessage",source,{color={255,0,0},multiline=false,args={"Admin Mode","Your assist request has expired"}})
-                end
+                if open_assists[source] then open_assists[source]=nil
+					if GetPlayerName(source)~=nil then
+						TriggerClientEvent("chat:addMessage",source,{color={255,0,0},multiline=false,args={"Admin Mode","Your assist request has expired"}})
+					end
+				end
             end)
             TriggerClientEvent("chat:addMessage",source,{color={0,255,0},multiline=false,args={"Admin Mode","Assist request sent (expires in 120s), write ^1/cassist^7 to cancel your request"}})
         else
