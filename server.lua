@@ -487,6 +487,7 @@ RegisterCommand('accassist', function(source, args, user)
     local xPlayer = ESX.GetPlayerFromId(source)
     local target = tonumber(args[1])
     acceptAssist(xPlayer,target)
+	TriggerClientEvent("esx_adminmode:hideAssistPopup", -1)
 end)
 
 RegisterServerEvent("esx_adminmode:acceptAssistKey")
