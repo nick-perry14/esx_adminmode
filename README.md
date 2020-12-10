@@ -21,7 +21,16 @@ Upon Disabling admin mode, the resource:
 - Resets the player's ped to the ESX skin (looking to change to last ped to work with EUP)
 
 ## Commands
+- /accassist \[ID\] - Accepts the assist from the specified player and teleports to them
 - /adminmode - Toggles the player into admin mode.
+- /assist \[reason\] - Requests assistance from admins
+- /ban - Opens Ban Window
+- /banlist - Opens Ban List
+- /decassist - Declines the pending assist.
+- /finassist - Finished the active assist and teleports the admin back to where they were.
+- /kick - Opens Kick Window
+- /warn - Opens Warn window
+- /warnlist - Opens Warn List
 
 ## Download
 - [Download Latest Release](https://github.com/nick-perry14/esx_adminmode/releases/latest)
@@ -34,7 +43,9 @@ Before asking me for help, or creating an issue, please check out the Wiki, loca
 ## API
 The simplest way to check if a user is in Admin Mode is to check their job.  If their job is one of the specified admin mode jobs, it can be assumed the user is in admin mode.
 
+## Credit
+
+- [Elipse458/el_bwh](https://github.com/Elipse458/el_bwh) - Main admin panel and UI
+
 ## Future Features
-- Config File with different groups
 - Add toggles for car spawn, ped spawn, etc.
-- Option to NOT spawn car with admin
