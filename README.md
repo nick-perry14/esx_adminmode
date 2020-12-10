@@ -26,7 +26,8 @@ Upon Disabling admin mode, the resource:
 - /assist \[reason\] - Requests assistance from admins
 - /ban - Opens Ban Window
 - /banlist - Opens Ban List
-- /decassist - Declines the pending assist.
+- /cassist - Cancels your active assist.
+- /decassist - Declines the pending assist (the assist will still be open for other admins).
 - /finassist - Finished the active assist and teleports the admin back to where they were.
 - /kick - Opens Kick Window
 - /warn - Opens Warn window
