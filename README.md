@@ -41,6 +41,7 @@ Upon Disabling admin mode, the resource:
 - /kick - Opens Kick Window
 - /warn - Opens Warn window
 - /warnlist - Opens Warn List
+- /sc \[message\] - Staff Chat 
 
 ## Download
 - [Download Latest Release](https://github.com/nick-perry14/esx_adminmode/releases/latest)
