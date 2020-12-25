@@ -440,6 +440,28 @@ RegisterCommand('bansrefresh', function(source, args, user)
 		TriggerClientEvent("chat:addMessage",source,{color={255,0,0},multiline=false,args={"Admin Mode","You don't have permissions to use this command!"}})
 	 end
 end)
+-- Staff Chat
+RegisterCommand('sc', function(source, args, rawCommand)
+    local playerName = GetPlayerName(source)
+    local msg = rawCommand:sub(4)
+    local name = getIdentity(source)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	msg = trimSpace(msg)
+	if isAuthed(xPlayer) then
+		if msg ~= "" then
+			local xPlayers = ESX.GetPlayers()
+			for i=1, #xPlayers, 1 do
+				local target = ESX.GetPlayerFromId(xPlayers[i])
+				if isAuthed(target) then
+					TriggerClientEvent("chat:addMessage",source,{color={102,255,0},multiline=false,args={"(Staff Chat) " .. playerName, msg}})
+				end
+			end
+		end
+	else
+		TriggerClientEvent("chat:addMessage",source,{color={255,0,0},multiline=false,args={"Admin Mode", "You don't have permissions to use this command!"}})
+		return
+	end
+end, false)
 
 RegisterCommand('assists', function(source, args, user)
 	local xPlayer = ESX.GetPlayerFromId(source)
